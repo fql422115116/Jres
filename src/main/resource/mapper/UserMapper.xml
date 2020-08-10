@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oracle.hrb.dao.UserDao">
+	<insert id="add" useGeneratedKeys="true" keyProperty="id">
+		insert into first_user(username, password) values(#{username}, #{password})
+	</insert>
+	<update id="update">
+		update first_user set username = #{username},password= #{password} where id = #{id}
+	</update>
+	<delete id="delete">
+		delete  from first_user where id = #{id}
+	</delete>
+	<!-- 查询需要加返回值类型的标签 -->
+	<select id="findAll" resultType="com.oracle.hrb.bean.User">
+		select * from first_user
+	</select>
+	<select id="findById" resultType="com.oracle.hrb.bean.User">
+		select * from first_user where id = #{id}
+	</select>
+	<select id="findByUsername" resultType="com.oracle.hrb.bean.User">
+		select * from first_user where username = #{username}
+	</select>
+</mapper>

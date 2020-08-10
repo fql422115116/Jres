@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>用户列表</title>
+	
+    <meta  charset="UTF-8">
+	  <script type="text/javascript" src="js/basePath.js"></script>
+   		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+   		<script type="text/javascript">
+   			$(function(){
+   				$.ajax({
+   					'url':basePath+'user/list.do',
+   					'method':'get',
+   					'success':function(result){
+   						for(var i=0;i<result.length;i++){
+   							var user = result[i];
+    					$('#userList').append(
+							'<tr>' +
+								'<td>' + user.id + '</td>' +
+								'<td>' + user.username + '</td>' +
+								'<td>' + user.password + '</td>' +
+    							'<td>' +
+									'<button onclick="updateForm(this);">修改</button>' +
+									'<button onclick="deleteUser(this);">删除</button>' +
+							'	</td>' +
+    						'</tr>');
+    					$('#userList tr:last').data('user', user);
+   						}
+   					}
+   				});
+   			});
+   			function deleteUser(btn){
+   				var user = $(btn).parent().parent().data('user');
+   				$.ajax({
+    			url:basePath + 'user/delete.do',
+    			method:'post',
+    			data:{id:user.id},
+    			success:function() {
+    				 $(btn).parent().parent().remove();
+    			}
+    		});
+   			}
+   			function updateForm(btn) {
+   			    var user =$(btn).parent().parent().data("user");
+				location.href="updateUser.html#"+user.id;
+            }
+   		</script>
+  </head>
+  
+  <body>
+   <button onclick="location.href='addUser.html'">添加用户</button>
+  	<table border="1">
+  		<thead>
+  			<tr>
+  				<td>编号</td>
+  				<td>用户名</td>
+  				<td>密码</td>
+  				<td>操作</td>
+  			</tr>
+  		</thead>
+  		<tbody id="userList"></tbody>
+  	</table>
+  </body>
+</html>

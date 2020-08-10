@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>修改用户</title>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/basePath.js"></script>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+    	$(function () {
+			var url=location.href;
+			var id = url.substring(url.lastIndexOf("#")+1);
+			$.ajax({
+				url:basePath +"user/getUserById.do",
+				method:"post",
+				data:{id:id},
+				success:function (user) {
+                    $("#userId").val(user.id);
+					$("#username").val(user.username);
+                    $("#password").val(user.password);
+                }
+			});
+        });
+    	function clearError(e) {
+    		$(e).next().html('');
+    	}
+    	function updateUser() {
+           var id= $("#userId").val();
+           var username = $("#username").val();
+           var password= $("#password").val();
+           $.ajax({
+			   url:basePath+"user/updateUser.do",
+			   method: "post",
+			   data:{id:id,username:username,password:password},
+			   success:function (result) {
+			       if(result.ok) {
+                       location.href = "userList.html";
+                   }else {
+                       $("#usernameError").html(result.value["usernameError"] == null ? "" : result.value["usernameError"]);
+                       $("#passwordError").html(result.value["passwordError"] == null ? "" : result.value["passwordError"]);
+                   }
+               }
+		   })
+        }
+    </script>
+  </head>
+  
+  <body>
+  	<div id="box">
+		<div id="userId"></div>
+  		<div>
+  			<input type="text" id="username" placeholder="用户名"  onfocus="clearError(this)">
+  			<span id="usernameError" style="color:red;"></span>
+  		</div>
+  		<div>
+  			<input type="password" id="password" placeholder="密码"  onfocus="clearError(this)">
+  			<span id="passwrodError" style="color:red;"></span>
+  		</div>
+  		<div>
+  			<button onclick="updateUser();">修改用户</button>
+  		</div>
+  	</div>
+  </body>
+</html>
+
